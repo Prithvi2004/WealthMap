@@ -390,7 +390,11 @@ const Dashboard: React.FC<DashboardProps> = ({
           }
         `}
         onClick={() =>
-          document.querySelector('button[data-view="map"]')?.click()
+          (
+            document.querySelector(
+              'button[data-view="map"]'
+            ) as HTMLButtonElement
+          )?.click()
         }
       >
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-black/10 group-hover:opacity-20 transition-opacity"></div>
