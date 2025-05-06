@@ -1,4 +1,5 @@
 export interface Property {
+  purchaseDate: any;
   longitude: any;
   latitude: any;
   id: string;
