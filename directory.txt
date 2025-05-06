@@ -1,0 +1,39 @@
+src
+ ┣ components
+ ┃ ┣ analysis
+ ┃ ┃ ┣ WealthAnalysis.tsx
+ ┃ ┃ ┗ WealthSummary.tsx
+ ┃ ┣ auth
+ ┃ ┃ ┗ LoginPage.tsx
+ ┃ ┣ dashboard
+ ┃ ┃ ┗ Dashboard.tsx
+ ┃ ┣ layout
+ ┃ ┃ ┣ Header.tsx
+ ┃ ┃ ┣ Layout.tsx
+ ┃ ┃ ┗ Sidebar.tsx
+ ┃ ┣ map
+ ┃ ┃ ┣ FilterPanel.tsx
+ ┃ ┃ ┗ MapView.tsx
+ ┃ ┣ property
+ ┃ ┃ ┣ PropertyCard.tsx
+ ┃ ┃ ┣ PropertyDetail.tsx
+ ┃ ┃ ┗ SmallPropertyCard.tsx
+ ┃ ┗ ui
+ ┃ ┃ ┣ button.tsx
+ ┃ ┃ ┣ card.tsx
+ ┃ ┃ ┣ dropdown-menu.tsx
+ ┃ ┃ ┣ hover-card.tsx
+ ┃ ┃ ┣ input.tsx
+ ┃ ┃ ┗ scroll-area.tsx
+ ┣ context
+ ┃ ┣ AppContext.tsx
+ ┃ ┗ ThemeContext.tsx
+ ┣ data
+ ┃ ┗ mockData.ts
+ ┣ lib
+ ┃ ┗ utils.ts
+ ┣ App.tsx
+ ┣ index.css
+ ┣ main.tsx
+ ┣ types.ts
+ ┗ vite-env.d.ts
