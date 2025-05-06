@@ -6,7 +6,16 @@ src
  ┃ ┣ auth
  ┃ ┃ ┗ LoginPage.tsx
  ┃ ┣ dashboard
- ┃ ┃ ┗ Dashboard.tsx
+ ┃ ┃ ┣ AnalysisPage.tsx
+ ┃ ┃ ┣ Dashboard.tsx
+ ┃ ┃ ┣ DataExportPage.tsx
+ ┃ ┃ ┣ OwnersPage.tsx
+ ┃ ┃ ┣ PropertiesPage.tsx
+ ┃ ┃ ┣ ReportsPage.tsx
+ ┃ ┃ ┣ SettingsPage.tsx
+ ┃ ┃ ┗ SharingPage.tsx
+ ┃ ┣ hooks
+ ┃ ┃ ┗ useFilteredSortedData.ts
  ┃ ┣ layout
  ┃ ┃ ┣ Header.tsx
  ┃ ┃ ┣ Layout.tsx
@@ -24,7 +33,8 @@ src
  ┃ ┃ ┣ dropdown-menu.tsx
  ┃ ┃ ┣ hover-card.tsx
  ┃ ┃ ┣ input.tsx
- ┃ ┃ ┗ scroll-area.tsx
+ ┃ ┃ ┣ scroll-area.tsx
+ ┃ ┃ ┗ Tooltip.tsx
  ┣ context
  ┃ ┣ AppContext.tsx
  ┃ ┗ ThemeContext.tsx

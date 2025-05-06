@@ -75,6 +75,7 @@ export interface Owner {
 }
 
 export interface WealthSource {
+  amount: any;
   type: 'real_estate' | 'stocks' | 'private_equity' | 'other';
   value: number;
   percentage: number;

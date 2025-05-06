@@ -11,7 +11,6 @@ import WealthAnalysis from "./components/analysis/WealthAnalysis";
 // Import placeholder components for new views
 import PropertiesPage from "./components/dashboard/PropertiesPage";
 import OwnersPage from "./components/dashboard/OwnersPage";
-import AnalysisPage from "./components/dashboard/AnalysisPage"; // This may be redundant if it's WealthAnalysis
 import ReportsPage from "./components/dashboard/ReportsPage";
 import DataExportPage from "./components/dashboard/DataExportPage";
 import SharingPage from "./components/dashboard/SharingPage"; // Fixed: was importing SettingsPage before
@@ -85,11 +84,9 @@ function App() {
               onOwnerSelect={handleOwnerSelect}
             />
           )}
-
           {currentView === "map" && (
             <MapView onPropertySelect={handlePropertySelect} />
           )}
-
           {currentView === "property" && selectedPropertyId && (
             <PropertyDetail
               propertyId={selectedPropertyId}
@@ -97,7 +94,6 @@ function App() {
               onBack={() => setCurrentView("map")}
             />
           )}
-
           {currentView === "analysis" && selectedOwnerId && (
             <WealthAnalysis
               ownerId={selectedOwnerId}
@@ -111,14 +107,12 @@ function App() {
           )}
 
           {/* Additional Pages */}
-          {currentView === "properties" && <PropertiesPage />}
-          {currentView === "owners" && <OwnersPage />}
-          {currentView === "analysis" && <AnalysisPage />}
-          {currentView === "owners" && <OwnersPage />}
-          {currentView === "reports" && <ReportsPage />}
           {currentView === "export" && <DataExportPage />}
-          {currentView === "sharing" && <SharingPage />}
+          {currentView === "owners" && <OwnersPage />}
+          {currentView === "properties" && <PropertiesPage />}
+          {currentView === "reports" && <ReportsPage />}
           {currentView === "settings" && <SettingsPage />}
+          {currentView === "sharing" && <SharingPage />}
         </Layout>
       </AppContextProvider>
     </ThemeProvider>
