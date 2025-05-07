@@ -14,6 +14,21 @@ import FilterPanel from "./FilterPanel";
 import PropertyCard from "../property/PropertyCard";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import type { LatLngExpression } from "leaflet";
+import L from "leaflet";
+
+// Set default marker icon using CDN
+const DefaultIcon = new L.Icon({
+  iconUrl:
+    "https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/images/marker-icon.png",
+  shadowUrl:
+    "https://cdn.jsdelivr.net/npm/leaflet@1.7.1/dist/images/marker-shadow.png",
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41],
+});
+
+L.Marker.prototype.options.icon = DefaultIcon;
 
 interface MapViewProps {
   onPropertySelect: (propertyId: string) => void;
@@ -22,7 +37,6 @@ interface MapViewProps {
 const MapView: React.FC<MapViewProps> = ({ onPropertySelect }) => {
   const { properties } = useAppContext();
   const { theme } = useTheme();
-
   const [showFilters, setShowFilters] = useState(false);
   const [selectedFilterTab, setSelectedFilterTab] = useState<string>("value");
   const [selectedProperty, setSelectedProperty] = useState<string | null>(null);
