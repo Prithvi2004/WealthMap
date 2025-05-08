@@ -126,7 +126,8 @@ const App = () => {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<DashboardWrapper />} />
+                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route path="dashboard" element={<DashboardWrapper />} />
                 <Route path="map" element={<MapViewWrapper />} />
                 <Route path="property/:propertyId" element={<PropertyDetailWrapper />} />
                 <Route path="analysis/:ownerId" element={<WealthAnalysisWrapper />} />

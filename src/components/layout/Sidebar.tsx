@@ -11,7 +11,6 @@ import {
   Settings,
   Share2,
   HelpCircle,
-  LogOut,
   Database,
   UserCog2,
 } from "lucide-react";
@@ -29,7 +28,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   const navigate = useNavigate();
 
   const menuItems = [
-    { icon: <Home size={20} />, label: "Dashboard", path: "/" },
+    { icon: <Home size={20} />, label: "Dashboard", path: "/dashboard" },
     { icon: <Map size={20} />, label: "Property Map", path: "/map" },
     { icon: <Building size={20} />, label: "Properties", path: "/properties" },
     { icon: <Users size={20} />, label: "Owners", path: "/owners" },
