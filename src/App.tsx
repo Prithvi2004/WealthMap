@@ -7,18 +7,25 @@ import LoginPage from "./components/auth/LoginPage";
 import MapView from "./components/map/MapView";
 import PropertyDetail from "./components/property/PropertyDetail";
 import WealthAnalysis from "./components/analysis/WealthAnalysis";
-
-// Import placeholder components for new views
+import AdminPanel from "./components/dashboard/AdminPanel";
 import PropertiesPage from "./components/dashboard/PropertiesPage";
 import OwnersPage from "./components/dashboard/OwnersPage";
 import ReportsPage from "./components/dashboard/ReportsPage";
 import DataExportPage from "./components/dashboard/DataExportPage";
-import SharingPage from "./components/dashboard/SharingPage"; // Fixed: was importing SettingsPage before
+import SharingPage from "./components/dashboard/SharingPage";
 import SettingsPage from "./components/dashboard/SettingsPage";
-
 import { AppContextProvider } from "./context/AppContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-// Define all available views
+// Utility function for theme-aware toast styling
+const getToastStyle = (theme: string) => {
+  return theme === "dark"
+    ? "bg-green-800 text-white border-green-500 shadow-lg"
+    : "bg-green-100 text-green-800 border-green-500 shadow-md";
+};
+
+// Define all available views including admin
 type View =
   | "login"
   | "dashboard"
@@ -30,19 +37,32 @@ type View =
   | "reports"
   | "export"
   | "sharing"
-  | "settings";
+  | "settings"
+  | "admin";
 
-function App() {
+const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [currentView, setCurrentView] = useState<View>("login");
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(
-    null
-  );
+  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
   const [selectedOwnerId, setSelectedOwnerId] = useState<string | null>(null);
+  const [theme, setTheme] = useState("light");
 
   const handleLogin = () => {
     setIsAuthenticated(true);
     setCurrentView("dashboard");
+
+    const options = {
+      className: getToastStyle(theme),
+      progressClassName: `h-1 bg-gradient-to-r from-green-400 to-emerald-500`,
+      autoClose: 3000,
+    };
+
+    toast.success(
+      <div className="flex items-center">
+        <span className="text-lg font-semibold">✅ Login successful!</span>
+      </div>,
+      options
+    );
   };
 
   const handleLogout = () => {
@@ -113,10 +133,14 @@ function App() {
           {currentView === "reports" && <ReportsPage />}
           {currentView === "settings" && <SettingsPage />}
           {currentView === "sharing" && <SharingPage />}
+
+          {/* Admin Panel - Only for users with admin role */}
+          {currentView === "admin" && <AdminPanel />}
         </Layout>
+        <ToastContainer />
       </AppContextProvider>
     </ThemeProvider>
   );
-}
+};
 
 export default App;

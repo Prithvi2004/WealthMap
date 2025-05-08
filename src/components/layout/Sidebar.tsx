@@ -5,13 +5,14 @@ import {
   Map,
   Building,
   Users,
+  BarChart3,
   FileText,
   Settings,
   Share2,
   HelpCircle,
   LogOut,
   Database,
-  BarChart3,
+  UserCog2,
 } from "lucide-react";
 
 interface SidebarProps {
@@ -36,6 +37,7 @@ const Sidebar: React.FC<SidebarProps> = ({
     { icon: <Database size={20} />, label: "Data Export", view: "export" },
     { icon: <Share2 size={20} />, label: "Sharing", view: "sharing" },
     { icon: <FileText size={20} />, label: "Reports", view: "reports" },
+    { icon: <UserCog2 size={20} />, label: "Panel", view: "admin" },
   ];
 
   const bottomMenuItems = [
