@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import {
   Mail,
   Lock,
@@ -15,23 +16,19 @@ import {
   Image,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "../../context/AuthContext";
 
-// Define Props
-interface LoginPageProps {
-  onLogin: () => void;
-}
-
-const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
+const LoginPage: React.FC = () => {
+  const { login } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [view, setView] = useState<"login" | "register">("login");
-  const [registerType, setRegisterType] = useState<"company" | "employee">(
-    "company"
-  );
+  const [registerType, setRegisterType] = useState<"company" | "employee">("company");
 
   // Login Form States
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   // Company Registration
   const [companyName, setCompanyName] = useState("");
@@ -63,20 +60,28 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
     }
   };
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate authentication
-    if (email && password) {
-      // Trigger parent App's login handler
-      onLogin();
+    if (!email || !password) {
+      toast.error("Please fill in all fields");
+      return;
+    }
+
+    setIsLoading(true);
+    try {
+      await login(email, password);
+      toast.success("Login successful! Welcome back.");
+    } catch (error) {
+      toast.error("Login failed. Please check your credentials.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
     <div
-      className={`min-h-screen flex overflow-hidden transition-colors duration-700 ${
-        isDarkMode ? "bg-gray-950 text-white" : "bg-indigo-950 text-white"
-      }`}
+      className={`min-h-screen flex overflow-hidden transition-colors duration-700 ${isDarkMode ? "bg-gray-950 text-white" : "bg-indigo-950 text-white"
+        }`}
     >
       {/* Background Glows */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -251,7 +256,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onLogin }) => {
                     <InputField
                       label="Email Address"
                       value="jane.doe@company.com"
-                      onChange={() => {}}
+                      onChange={() => { }}
                       placeholder="jane.doe@company.com"
                       readOnly
                     />
@@ -407,11 +412,10 @@ const TabButton: React.FC<{
 }> = ({ active, onClick, children }) => (
   <button
     onClick={onClick}
-    className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${
-      active
-        ? "bg-gradient-to-r from-[#5643CC] to-[#00E6FF] text-white"
-        : "bg-white/10 text-indigo-200 hover:bg-white/20"
-    }`}
+    className={`px-4 py-2 rounded-lg transition-all flex items-center gap-2 ${active
+      ? "bg-gradient-to-r from-[#5643CC] to-[#00E6FF] text-white"
+      : "bg-white/10 text-indigo-200 hover:bg-white/20"
+      }`}
   >
     {children}
   </button>
@@ -481,15 +485,14 @@ const PasswordStrengthMeter: React.FC<{ password: string }> = ({
     <div className="space-y-1">
       <div className="h-1.5 w-full bg-white/10 rounded-full overflow-hidden">
         <div
-          className={`h-full rounded-full ${
-            strength <= 1
-              ? "bg-red-500"
-              : strength === 2
+          className={`h-full rounded-full ${strength <= 1
+            ? "bg-red-500"
+            : strength === 2
               ? "bg-yellow-500"
               : strength === 3
-              ? "bg-blue-500"
-              : "bg-green-500"
-          }`}
+                ? "bg-blue-500"
+                : "bg-green-500"
+            }`}
           style={{ width: `${(strength / 4) * 100}%` }}
         ></div>
       </div>
@@ -497,12 +500,12 @@ const PasswordStrengthMeter: React.FC<{ password: string }> = ({
         {strength === 0
           ? "Weak"
           : strength === 1
-          ? "Fair"
-          : strength === 2
-          ? "Good"
-          : strength === 3
-          ? "Strong"
-          : "Excellent"}
+            ? "Fair"
+            : strength === 2
+              ? "Good"
+              : strength === 3
+                ? "Strong"
+                : "Excellent"}
       </p>
     </div>
   );

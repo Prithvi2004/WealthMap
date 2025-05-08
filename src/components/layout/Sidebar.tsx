@@ -1,5 +1,6 @@
 import React from "react";
 import { useTheme } from "../../context/ThemeContext";
+import { useNavigate, Link } from "react-router-dom";
 import {
   Home,
   Map,
@@ -17,46 +18,43 @@ import {
 
 interface SidebarProps {
   isOpen: boolean;
-  onViewChange: (view: "dashboard" | "map" | "property" | "analysis") => void;
-  currentView: string;
+  currentPath: string;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
-  onViewChange,
-  currentView,
+  currentPath,
 }) => {
   const { theme } = useTheme();
+  const navigate = useNavigate();
 
   const menuItems = [
-    { icon: <Home size={20} />, label: "Dashboard", view: "dashboard" },
-    { icon: <Map size={20} />, label: "Property Map", view: "map" },
-    { icon: <Building size={20} />, label: "Properties", view: "properties" },
-    { icon: <Users size={20} />, label: "Owners", view: "owners" },
-    { icon: <BarChart3 size={20} />, label: "Analysis", view: "analysis" },
-    { icon: <Database size={20} />, label: "Data Export", view: "export" },
-    { icon: <Share2 size={20} />, label: "Sharing", view: "sharing" },
-    { icon: <FileText size={20} />, label: "Reports", view: "reports" },
-    { icon: <UserCog2 size={20} />, label: "Panel", view: "admin" },
+    { icon: <Home size={20} />, label: "Dashboard", path: "/" },
+    { icon: <Map size={20} />, label: "Property Map", path: "/map" },
+    { icon: <Building size={20} />, label: "Properties", path: "/properties" },
+    { icon: <Users size={20} />, label: "Owners", path: "/owners" },
+    { icon: <BarChart3 size={20} />, label: "Analysis", path: "/analysis" },
+    { icon: <Database size={20} />, label: "Data Export", path: "/export" },
+    { icon: <Share2 size={20} />, label: "Sharing", path: "/sharing" },
+    { icon: <FileText size={20} />, label: "Reports", path: "/reports" },
+    { icon: <UserCog2 size={20} />, label: "Panel", path: "/admin" },
   ];
 
   const bottomMenuItems = [
-    { icon: <Settings size={20} />, label: "Settings", view: "settings" },
-    { icon: <HelpCircle size={20} />, label: "Help", view: "help" },
+    { icon: <Settings size={20} />, label: "Settings", path: "/settings" },
+    { icon: <HelpCircle size={20} />, label: "Help", path: "/help" },
   ];
 
   return (
     <aside
       className={`
         fixed inset-y-0 left-0 z-20 pt-16 
-        transform ${
-          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        transform ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } 
         transition-transform duration-300 ease-in-out
-        ${
-          theme === "dark"
-            ? "bg-[#171b29]/80 text-white border-r border-indigo-900/30"
-            : "bg-white text-gray-700 border-r border-gray-200/50"
+        ${theme === "dark"
+          ? "bg-[#171b29]/80 text-white border-r border-indigo-900/30"
+          : "bg-white text-gray-700 border-r border-gray-200/50"
         } 
         backdrop-blur-md
         ${isOpen ? "w-64" : "w-16"}
@@ -65,17 +63,16 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div className="flex flex-col justify-between h-full overflow-y-auto no-scrollbar">
         <nav className="space-y-1 p-2">
           {menuItems.map((item) => (
-            <button
-              key={item.view}
-              onClick={() => onViewChange(item.view as any)}
+            <Link
+              key={item.path}
+              to={item.path}
               className={`
                 flex items-center w-full p-3 rounded-lg transition-colors duration-200
-                ${
-                  currentView === item.view
-                    ? theme === "dark"
-                      ? "bg-indigo-900/50 text-[#00E6FF]"
-                      : "bg-indigo-50 text-indigo-700"
-                    : theme === "dark"
+                ${currentPath === item.path
+                  ? theme === "dark"
+                    ? "bg-indigo-900/50 text-[#00E6FF]"
+                    : "bg-indigo-50 text-indigo-700"
+                  : theme === "dark"
                     ? "hover:bg-indigo-900/20 text-gray-300"
                     : "hover:bg-gray-100 text-gray-700"
                 }
@@ -83,23 +80,22 @@ const Sidebar: React.FC<SidebarProps> = ({
             >
               <span className="flex-shrink-0">{item.icon}</span>
               {isOpen && <span className="ml-3 truncate">{item.label}</span>}
-            </button>
+            </Link>
           ))}
         </nav>
 
         <div className="mt-auto p-2">
           {bottomMenuItems.map((item) => (
-            <button
-              key={item.view}
-              onClick={() => onViewChange(item.view as any)}
+            <Link
+              key={item.path}
+              to={item.path}
               className={`
                 flex items-center w-full p-3 rounded-lg transition-colors duration-200
-                ${
-                  currentView === item.view
-                    ? theme === "dark"
-                      ? "bg-indigo-900/50 text-[#00E6FF]"
-                      : "bg-indigo-50 text-indigo-700"
-                    : theme === "dark"
+                ${currentPath === item.path
+                  ? theme === "dark"
+                    ? "bg-indigo-900/50 text-[#00E6FF]"
+                    : "bg-indigo-50 text-indigo-700"
+                  : theme === "dark"
                     ? "hover:bg-indigo-900/20 text-gray-300"
                     : "hover:bg-gray-100 text-gray-700"
                 }
@@ -107,7 +103,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             >
               <span className="flex-shrink-0">{item.icon}</span>
               {isOpen && <span className="ml-3 truncate">{item.label}</span>}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

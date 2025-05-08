@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { ThemeProvider } from "./context/ThemeContext";
+import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Outlet } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -15,7 +16,8 @@ import DataExportPage from "./components/dashboard/DataExportPage";
 import SharingPage from "./components/dashboard/SharingPage";
 import SettingsPage from "./components/dashboard/SettingsPage";
 import { AppContextProvider } from "./context/AppContext";
-import { ToastContainer, toast } from "react-toastify";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Utility function for theme-aware toast styling
@@ -25,121 +27,123 @@ const getToastStyle = (theme: string) => {
     : "bg-green-100 text-green-800 border-green-500 shadow-md";
 };
 
-// Define all available views including admin
-type View =
-  | "login"
-  | "dashboard"
-  | "map"
-  | "property"
-  | "analysis"
-  | "properties"
-  | "owners"
-  | "reports"
-  | "export"
-  | "sharing"
-  | "settings"
-  | "admin";
+// Protected Route component
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <>{children}</> : <Navigate to="/login" />;
+};
 
-const App = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [currentView, setCurrentView] = useState<View>("login");
-  const [selectedPropertyId, setSelectedPropertyId] = useState<string | null>(null);
-  const [selectedOwnerId, setSelectedOwnerId] = useState<string | null>(null);
-  const [theme, setTheme] = useState("light");
+// Wrapper components to handle props
+const PropertyDetailWrapper = () => {
+  const { propertyId } = useParams();
+  const navigate = useNavigate();
 
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-    setCurrentView("dashboard");
-
-    const options = {
-      className: getToastStyle(theme),
-      progressClassName: `h-1 bg-gradient-to-r from-green-400 to-emerald-500`,
-      autoClose: 3000,
-    };
-
-    toast.success(
-      <div className="flex items-center">
-        <span className="text-lg font-semibold">✅ Login successful!</span>
-      </div>,
-      options
-    );
+  const handleOwnerSelect = (ownerId: string) => {
+    navigate(`/analysis/${ownerId}`);
   };
 
-  const handleLogout = () => {
-    setIsAuthenticated(false);
-    setCurrentView("login");
+  const handleBack = () => {
+    navigate(-1);
   };
 
-  const handleViewChange = (view: View) => {
-    setCurrentView(view);
-  };
+  return (
+    <PropertyDetail
+      propertyId={propertyId || ''}
+      onOwnerSelect={handleOwnerSelect}
+      onBack={handleBack}
+    />
+  );
+};
+
+const WealthAnalysisWrapper = () => {
+  const { ownerId } = useParams();
+  const navigate = useNavigate();
 
   const handlePropertySelect = (propertyId: string) => {
-    setSelectedPropertyId(propertyId);
-    setCurrentView("property");
+    navigate(`/property/${propertyId}`);
+  };
+
+  const handleBack = () => {
+    navigate(-1);
+  };
+
+  return (
+    <WealthAnalysis
+      ownerId={ownerId || ''}
+      onPropertySelect={handlePropertySelect}
+      onBack={handleBack}
+    />
+  );
+};
+
+const DashboardWrapper = () => {
+  const navigate = useNavigate();
+
+  const handlePropertySelect = (propertyId: string) => {
+    navigate(`/property/${propertyId}`);
   };
 
   const handleOwnerSelect = (ownerId: string) => {
-    setSelectedOwnerId(ownerId);
-    setCurrentView("analysis");
+    navigate(`/analysis/${ownerId}`);
   };
 
-  // Render login page if not authenticated
-  if (!isAuthenticated) {
-    return <LoginPage onLogin={handleLogin} />;
-  }
-
   return (
-    <ThemeProvider>
-      <AppContextProvider>
-        <Layout
-          onViewChange={handleViewChange}
-          currentView={currentView}
-          onLogout={handleLogout}
-        >
-          {/* Main Views */}
-          {currentView === "dashboard" && (
-            <Dashboard
-              onPropertySelect={handlePropertySelect}
-              onOwnerSelect={handleOwnerSelect}
-            />
-          )}
-          {currentView === "map" && (
-            <MapView onPropertySelect={handlePropertySelect} />
-          )}
-          {currentView === "property" && selectedPropertyId && (
-            <PropertyDetail
-              propertyId={selectedPropertyId}
-              onOwnerSelect={handleOwnerSelect}
-              onBack={() => setCurrentView("map")}
-            />
-          )}
-          {currentView === "analysis" && selectedOwnerId && (
-            <WealthAnalysis
-              ownerId={selectedOwnerId}
-              onPropertySelect={handlePropertySelect}
-              onBack={() =>
-                selectedPropertyId
-                  ? setCurrentView("property")
-                  : setCurrentView("dashboard")
-              }
-            />
-          )}
+    <Dashboard
+      onPropertySelect={handlePropertySelect}
+      onOwnerSelect={handleOwnerSelect}
+    />
+  );
+};
 
-          {/* Additional Pages */}
-          {currentView === "export" && <DataExportPage />}
-          {currentView === "owners" && <OwnersPage />}
-          {currentView === "properties" && <PropertiesPage />}
-          {currentView === "reports" && <ReportsPage />}
-          {currentView === "settings" && <SettingsPage />}
-          {currentView === "sharing" && <SharingPage />}
+const MapViewWrapper = () => {
+  const navigate = useNavigate();
 
-          {/* Admin Panel - Only for users with admin role */}
-          {currentView === "admin" && <AdminPanel />}
-        </Layout>
-        <ToastContainer />
-      </AppContextProvider>
-    </ThemeProvider>
+  const handlePropertySelect = (propertyId: string) => {
+    navigate(`/property/${propertyId}`);
+  };
+
+  return <MapView onPropertySelect={handlePropertySelect} />;
+};
+
+const App = () => {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <ThemeProvider>
+          <AppContextProvider>
+            <Routes>
+              {/* Public Routes */}
+              <Route path="/login" element={<LoginPage />} />
+
+              {/* Protected Routes */}
+              <Route
+                path="/"
+                element={
+                  <ProtectedRoute>
+                    <Layout>
+                      <Outlet />
+                    </Layout>
+                  </ProtectedRoute>
+                }
+              >
+                <Route index element={<DashboardWrapper />} />
+                <Route path="map" element={<MapViewWrapper />} />
+                <Route path="property/:propertyId" element={<PropertyDetailWrapper />} />
+                <Route path="analysis/:ownerId" element={<WealthAnalysisWrapper />} />
+                <Route path="properties" element={<PropertiesPage />} />
+                <Route path="owners" element={<OwnersPage />} />
+                <Route path="reports" element={<ReportsPage />} />
+                <Route path="export" element={<DataExportPage />} />
+                <Route path="sharing" element={<SharingPage />} />
+                <Route path="settings" element={<SettingsPage />} />
+                <Route path="admin" element={<AdminPanel />} />
+              </Route>
+            </Routes>
+            <ToastContainer />
+          </AppContextProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 };
 
