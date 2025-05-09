@@ -1,6 +1,14 @@
 import React from "react";
 import { ThemeProvider } from "./context/ThemeContext";
-import { BrowserRouter, Routes, Route, Navigate, useParams, useNavigate, Outlet } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useParams,
+  useNavigate,
+  Outlet,
+} from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 import Layout from "./components/layout/Layout";
 import Dashboard from "./components/dashboard/Dashboard";
@@ -48,7 +56,7 @@ const PropertyDetailWrapper = () => {
 
   return (
     <PropertyDetail
-      propertyId={propertyId || ''}
+      propertyId={propertyId || ""}
       onOwnerSelect={handleOwnerSelect}
       onBack={handleBack}
     />
@@ -69,7 +77,7 @@ const WealthAnalysisWrapper = () => {
 
   return (
     <WealthAnalysis
-      ownerId={ownerId || ''}
+      ownerId={ownerId || ""}
       onPropertySelect={handlePropertySelect}
       onBack={handleBack}
     />
@@ -126,11 +134,17 @@ const App = () => {
                   </ProtectedRoute>
                 }
               >
-                <Route index element={<Navigate to="/dashboard" replace />} />
+                <Route index element={<Navigate to="/login" replace />} />
                 <Route path="dashboard" element={<DashboardWrapper />} />
                 <Route path="map" element={<MapViewWrapper />} />
-                <Route path="property/:propertyId" element={<PropertyDetailWrapper />} />
-                <Route path="analysis/:ownerId" element={<WealthAnalysisWrapper />} />
+                <Route
+                  path="property/:propertyId"
+                  element={<PropertyDetailWrapper />}
+                />
+                <Route
+                  path="analysis/:ownerId"
+                  element={<WealthAnalysisWrapper />}
+                />
                 <Route path="properties" element={<PropertiesPage />} />
                 <Route path="owners" element={<OwnersPage />} />
                 <Route path="reports" element={<ReportsPage />} />
