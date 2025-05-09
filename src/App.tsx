@@ -28,13 +28,6 @@ import { AuthProvider, useAuth } from "./context/AuthContext";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-// Utility function for theme-aware toast styling
-const getToastStyle = (theme: string) => {
-  return theme === "dark"
-    ? "bg-green-800 text-white border-green-500 shadow-lg"
-    : "bg-green-100 text-green-800 border-green-500 shadow-md";
-};
-
 // Protected Route component
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated } = useAuth();
@@ -151,7 +144,7 @@ const App = () => {
                 <Route path="export" element={<DataExportPage />} />
                 <Route path="sharing" element={<SharingPage />} />
                 <Route path="settings" element={<SettingsPage />} />
-                <Route path="admin" element={<AdminPanel />} />
+                {/* <Route path="admin" element={<AdminPanel />} /> */}
               </Route>
             </Routes>
             <ToastContainer />

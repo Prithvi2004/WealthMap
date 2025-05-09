@@ -20,10 +20,7 @@ interface SidebarProps {
   currentPath: string;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({
-  isOpen,
-  currentPath,
-}) => {
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, currentPath }) => {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
@@ -32,11 +29,11 @@ const Sidebar: React.FC<SidebarProps> = ({
     { icon: <Map size={20} />, label: "Property Map", path: "/map" },
     { icon: <Building size={20} />, label: "Properties", path: "/properties" },
     { icon: <Users size={20} />, label: "Owners", path: "/owners" },
-    { icon: <BarChart3 size={20} />, label: "Analysis", path: "/analysis" },
+    // { icon: <BarChart3 size={20} />, label: "Analysis", path: "/analysis" },
     { icon: <Database size={20} />, label: "Data Export", path: "/export" },
     { icon: <Share2 size={20} />, label: "Sharing", path: "/sharing" },
     { icon: <FileText size={20} />, label: "Reports", path: "/reports" },
-    { icon: <UserCog2 size={20} />, label: "Panel", path: "/admin" },
+    // { icon: <UserCog2 size={20} />, label: "Panel", path: "/admin" },
   ];
 
   const bottomMenuItems = [
@@ -48,12 +45,14 @@ const Sidebar: React.FC<SidebarProps> = ({
     <aside
       className={`
         fixed inset-y-0 left-0 z-20 pt-16 
-        transform ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+        transform ${
+          isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
         } 
         transition-transform duration-300 ease-in-out
-        ${theme === "dark"
-          ? "bg-[#171b29]/80 text-white border-r border-indigo-900/30"
-          : "bg-white text-gray-700 border-r border-gray-200/50"
+        ${
+          theme === "dark"
+            ? "bg-[#171b29]/80 text-white border-r border-indigo-900/30"
+            : "bg-white text-gray-700 border-r border-gray-200/50"
         } 
         backdrop-blur-md
         ${isOpen ? "w-64" : "w-16"}
@@ -67,11 +66,12 @@ const Sidebar: React.FC<SidebarProps> = ({
               to={item.path}
               className={`
                 flex items-center w-full p-3 rounded-lg transition-colors duration-200
-                ${currentPath === item.path
-                  ? theme === "dark"
-                    ? "bg-indigo-900/50 text-[#00E6FF]"
-                    : "bg-indigo-50 text-indigo-700"
-                  : theme === "dark"
+                ${
+                  currentPath === item.path
+                    ? theme === "dark"
+                      ? "bg-indigo-900/50 text-[#00E6FF]"
+                      : "bg-indigo-50 text-indigo-700"
+                    : theme === "dark"
                     ? "hover:bg-indigo-900/20 text-gray-300"
                     : "hover:bg-gray-100 text-gray-700"
                 }
@@ -90,11 +90,12 @@ const Sidebar: React.FC<SidebarProps> = ({
               to={item.path}
               className={`
                 flex items-center w-full p-3 rounded-lg transition-colors duration-200
-                ${currentPath === item.path
-                  ? theme === "dark"
-                    ? "bg-indigo-900/50 text-[#00E6FF]"
-                    : "bg-indigo-50 text-indigo-700"
-                  : theme === "dark"
+                ${
+                  currentPath === item.path
+                    ? theme === "dark"
+                      ? "bg-indigo-900/50 text-[#00E6FF]"
+                      : "bg-indigo-50 text-indigo-700"
+                    : theme === "dark"
                     ? "hover:bg-indigo-900/20 text-gray-300"
                     : "hover:bg-gray-100 text-gray-700"
                 }
